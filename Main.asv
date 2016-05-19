@@ -1,0 +1,44 @@
+%% QBH
+close all, clear all
+
+[x, Fs] = wavread('query.wav');
+x = x(:,1); % stereo => mono
+%soundsc(x ,Fs);
+N = length(x);
+tps = [0:N-1]/Fs;
+plot(tps, x);
+
+tfct(x, Fs);
+
+% note = x(76514:98784);
+% soundsc(note, Fs)
+% 
+% figure,
+% subplot(211)
+% plot(note)
+% 
+% Nfft = length(note);
+% X = fft(note, Nfft);
+% freq = [0:Nfft/2-1]*(Fs/Nfft);
+% subplot(212)
+% plot(freq, abs(X(1:Nfft/2)));
+
+
+packets = envelope_detector(x);
+
+figure, plot(x)
+hold on
+for i = 1 : size(packets,1)
+    for j = 1 : 2
+        plot([packets(i,j) packets(i,j)], [min(x) max(x)], 'r');
+    end
+end
+
+nbNotes = size(packets,1);
+pitch = zeros(nbNotes, 1);
+for i = 1 : nbNotes
+
+   pitch(i) = pitch_detector(x(packet, Fs);
+
+end
+
