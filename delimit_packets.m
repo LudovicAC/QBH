@@ -1,5 +1,6 @@
-function [ packets ] = delimit_packets( indicesNonZero )
+function [ packets ] = delimit_packets( x )
 
+indicesNonZero = find(x);
 N = size(indicesNonZero,1);
 
 packets = [];

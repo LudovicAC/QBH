@@ -1,20 +1,38 @@
-function [ packets ] = envelope_detector( x )
-% retourne les indices des points non nuls
+function [ packets ] = envelope_detector( x, Fs )
 
-windowlength = 150; % arbitraire
-overlap = 20; % arbitraire
+windowlength = 1000; % arbitraire
+overlap = 50; % arbitraire
 delta = windowlength - overlap;
-E = rms(x, windowlength, overlap, 1)'; % mettre le paramètre zeropad à 1
+RMS = rms(x, windowlength, overlap, 1)'; % mettre le paramètre zeropad à 1
 
-seuil = 0.2*max(E); % arbitraire
-E(E < seuil) = 0;
-E = ignoreZerosConsecutifs(E, 5); % arbitraire
-%figure, stem(E);
-indicesEnvelope = find(E);
-indicesEnvelope = indicesEnvelope(:);
+%% Enlève bruit de fond
 
-packets = delimit_packets( indicesEnvelope );
-packets = delta*packets; % homotéthie pour contrecarrer celle causée par rms
+%suppose que les premiers instants = bruit de fond et que celui constant
+%au cours de l'enregistrement
+tmps = 0.5*Fs;  % arbitraire
+bruitFond = noise(x, tmps);
+coeff = 5; % arbitraire
+E = RMS;
+E(E < bruitFond*coeff) = 0;
+figure, stem(E);
+packets = delimit_packets( E );
+
+%% Sépare 2 notes proches
+newPackets = [];
+for i = 1 : size(packets,1)
+    packets_tmp = distinguishNotesInPacket( E(packets(i,1):packets(i,2)));
+    packets_tmp = packets_tmp +  packets(i,1); % on remet l'offset...
+    newPackets = [newPackets ; packets_tmp];
+end
+packets = newPackets;
+
+%% Corrige la tendance à détecter un peu trop tard les attaques (du au seuillage)
+avance = 2; % arbitraire
+packets(:,1) = packets(:,1) - avance; 
+
+%% Compense la compression RMS
+packets = delta* packets;
+
 
 end
 

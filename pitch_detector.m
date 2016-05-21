@@ -12,6 +12,7 @@ tmps= [0:length(x)-1]/Fs;
 %figure, plot(tmps, x);
 
 offset=floor(0.1*Fs); % arbitraire , pour écarter l'attaque..
+%offset = 0; % ici on suppose qu'on donne dès le début de la note sans l'attaque
 timeAnalysis = (length(x) - offset)*0.9; % arbitraire mais faire en sorte que malgré l'offset, on n'excède pas les dimensions..
 
 spect_smooth=2; % options: 0: no spectral smoothness

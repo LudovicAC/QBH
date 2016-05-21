@@ -1,7 +1,7 @@
 %% QBH
 close all, clear all
 
-[x, Fs] = wavread('query.wav');
+[x, Fs] = wavread('sounds/query.wav');
 x = x(:,1); % stereo => mono
 soundsc(x ,Fs);
 
@@ -12,10 +12,11 @@ figure, plot(tps, x);
 
 tfct(x, Fs);
 
-%% Détection enveloppe
-packets = envelope_detector(x);
+%% Dï¿½tection enveloppe
+packets = envelope_detector(x, Fs);
+packets = reshape(packets, max(size(packets)), 2);
 
-figure, plot(x)
+figure, stem(x)
 hold on
 for i = 1 : size(packets,1)
     for j = 1 : 2
@@ -24,7 +25,7 @@ for i = 1 : size(packets,1)
 end
 hold off;
 
-%% Détection pitch
+%% Dï¿½tection pitch
 nbNotes = size(packets,1);
 pitch = zeros(nbNotes, 1);
 for i = 1 : nbNotes
