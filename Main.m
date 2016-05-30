@@ -3,7 +3,7 @@ close all, clear all
 
 [x, Fs] = wavread('sounds/query.wav');
 x = x(:,1); % stereo => mono
-soundsc(x ,Fs);
+%soundsc(x ,Fs);
 
 %% Affichage signal
 N = length(x);
@@ -37,5 +37,18 @@ figure, plot(pitch, 'o'), title('pitch')
 %% Lissage du pitch avec median filter d'ordre 5 ?
 
 %% Transform pitch into semi-tone scale (to compare it to MIDI format)
-pitchSemiTone = semitone(pitch)
+pitchSemiTone = semitone(pitch);
+figure, plot(pitchSemiTone, 'o'), title('pitch - semitone')
 
+%%
+pitchSemiTone_Music = [53 ; 53 ; 54 ; 53; 53; 53 ; pitchSemiTone ; 56;56;56;58;58];
+[S, scoreSimilarity] = LADTW_Similarity(pitchSemiTone, pitchSemiTone_Music);
+figure, imagesc(S), colorbar
+scoreSimilarity
+
+pitchSemiTone_Music = [pitchSemiTone ; 56;56;56;58;58];
+[S, scoreSimilarity] = LADTW_Similarity(pitchSemiTone, pitchSemiTone_Music);
+figure, imagesc(S), colorbar
+scoreSimilarity
+
+% idée : diviser par la taille du chemin : de 0,0 au max S ... 
