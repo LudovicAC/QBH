@@ -1,4 +1,5 @@
-function [ S, maxx ] = LADTW_Similarity( p,q )
+function [ scoreSimilarity, S, w ] = LADTW_Similarity( p, q )
+% p : music & q : query
 
 p = p(:);
 q = q(:);
@@ -22,7 +23,48 @@ for i=2:n
     end
 end
 
-maxx = max(max(S));
+% idée : au lieu de prendre le max de S, prendre la moyenne sur les k denières
+% valeurs de S (où k paramètre à déterminé < n (taille de la query) et la dernière valeur est
+% celle du max de S)  et retrancher la similarity cumulée à la k+1ème
+% valeur (en partant de la fin)
 
+k = n-1; % < n   à ajuster
+
+maxx = max(S);
+[maxx, j_max] = max(maxx);
+[maxx, i_max] = max(S(:,j_max));
+
+w = [i_max j_max];
+score_tmp = maxx;
+
+i = i_max;
+j = j_max;
+
+while i+j~=2
+    if i == 1
+        j = j-1;
+        maxx = S(1,j);
+    elseif j == 1
+        i = i-1;
+        maxx = S(i,j);
+    else
+        [maxx, ind] = max([S(i-1,j), S(i,j-1), S(i-1,j-1)]);
+        
+        switch ind
+            case 1
+                i=i-1;
+            case 2
+                j=j-1;
+            case 3
+                i=i-1;
+                j=j-1;
+        end
+    end
+    w = [w; i j];
+    score_tmp = [score_tmp ; maxx];
+end
+
+    scoreSimilarity = mean(score_tmp(1:k));
+    scoreSimilarity = scoreSimilarity - score_tmp(k+1);
 end
 

@@ -42,13 +42,20 @@ figure, plot(pitchSemiTone, 'o'), title('pitch - semitone')
 
 %%
 pitchSemiTone_Music = [53 ; 53 ; 54 ; 53; 53; 53 ; pitchSemiTone ; 56;56;56;58;58];
-[S, scoreSimilarity] = LADTW_Similarity(pitchSemiTone, pitchSemiTone_Music);
+[scoreSimilarity, S, w] = LADTW_Similarity(pitchSemiTone_Music, pitchSemiTone);
 figure, imagesc(S), colorbar
+hold on
+plot(w(:,2), w(:,1), '+r')
+hold off
 scoreSimilarity
-
+%%
 pitchSemiTone_Music = [pitchSemiTone ; 56;56;56;58;58];
-[S, scoreSimilarity] = LADTW_Similarity(pitchSemiTone, pitchSemiTone_Music);
+[scoreSimilarity, S, w] = LADTW_Similarity(pitchSemiTone_Music, pitchSemiTone);
 figure, imagesc(S), colorbar
+hold on
+plot(w(:,2), w(:,1), '+r')
+hold off
 scoreSimilarity
 
-% idée : diviser par la taille du chemin : de 0,0 au max S ... 
+%%
+
