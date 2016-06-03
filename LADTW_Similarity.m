@@ -16,9 +16,10 @@ S(1,1) = 0;
 S(:,1) = max([ -abs(q - repmat(p(1), n, 1)) + Cdtw, zeros(n,1) ], [], 2);
 S(1,2:end) = max([ -abs(repmat(q(1), m-1, 1) - p(2:end)) + Cdtw, zeros(m-1,1) ], [], 2);
 
+
 for i=2:n
     for j=2:m
-        s = -abs(q(i) - p(j));
+        s = -sqrt(abs(q(i) - p(j)));
         S(i,j) = max([S(i-1,j-1)+s+Cdtw, S(i-1, j)+s+w*Cdtw, S(i, j-1)+s+w*Cdtw, 0]);
     end
 end
@@ -40,7 +41,7 @@ score_tmp = maxx;
 i = i_max;
 j = j_max;
 
-while i+j~=2
+while i+j>2  % i+j~=2
     if i == 1
         j = j-1;
         maxx = S(1,j);
@@ -60,11 +61,19 @@ while i+j~=2
                 j=j-1;
         end
     end
+    
     w = [w; i j];
     score_tmp = [score_tmp ; maxx];
 end
 
-    scoreSimilarity = mean(score_tmp(1:k));
-    scoreSimilarity = scoreSimilarity - score_tmp(k+1);
+l = length(score_tmp);
+if (l > k)
+    tmp = k;
+else
+   tmp = l-1; 
+end
+scoreSimilarity = mean(score_tmp(1:tmp));
+scoreSimilarity = scoreSimilarity - score_tmp(tmp+1);
+
 end
 

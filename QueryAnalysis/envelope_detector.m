@@ -1,6 +1,6 @@
 function [ packets ] = envelope_detector( x, Fs )
 
-windowlength = 1000; % arbitraire
+windowlength = 900; % arbitraire
 overlap = 50; % arbitraire
 delta = windowlength - overlap;
 RMS = rms(x, windowlength, overlap, 1)'; % mettre le paramètre zeropad à 1
