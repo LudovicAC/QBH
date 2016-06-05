@@ -3,7 +3,7 @@ close all, clear all
 
 [x, Fs] = wavread('sounds/Query00083.wav');
 x = x(:,1); % stereo => mono
-soundsc(x ,Fs);
+%soundsc(x ,Fs);
 
 %% Affichage signal
 N = length(x);
@@ -34,7 +34,6 @@ end
 
 figure, plot(pitch, 'o'), title('pitch')
 
-%% Lissage du pitch avec median filter d'ordre 5 ?
 
 %% Transform pitch into semi-tone scale (to compare it to MIDI format)
 pitchSemiTone = semitone(pitch);
@@ -94,7 +93,7 @@ end
 
 %%
 %allNames(score(:,2))
-% vrai song : 6, 40 217
+% vrai song : 6, 
 i=6;
 figure,
 hold on
@@ -112,15 +111,15 @@ scoreSimilarity
 music = cell2mat(pitch_BddMidi(6));
 n=20;
 music= music(1:n);
-music = music - median(music);
-pitchSemiTone =  pitchSemiTone - median(pitchSemiTone);
+music = music - mean(music);
+pitchQuery =  pitchSemiTone - mean(pitchSemiTone);
 
 figure,
 hold on
 plot(music, 'or')
-plot(pitchSemiTone, '+b')
+plot(pitchQuery, '+b')
 hold off
-[scoreSimilarity, S, w] = LADTW_Similarity(music, pitchSemiTone);
+[scoreSimilarity, S, w] = LADTW_Similarity(music, pitchQuery);
 figure, imagesc(S), colorbar
 hold on
 plot(w(:,2), w(:,1), '+r')

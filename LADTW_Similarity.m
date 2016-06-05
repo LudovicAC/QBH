@@ -6,8 +6,8 @@ q = q(:);
 n = size(q,1);
 m = size(p,1);
 
-Cdtw = 0.8; % empirique
-w = 1.6; % empirique
+Cdtw = 1.5; % empirique
+w = 0.5; % empirique
 
 S = zeros(n,m);
 S(:,:) = -Inf;
@@ -72,8 +72,9 @@ if (l > k)
 else
    tmp = l-1; 
 end
-scoreSimilarity = mean(score_tmp(1:tmp));
-scoreSimilarity = scoreSimilarity - score_tmp(tmp+1);
+%scoreSimilarity = mean(score_tmp(1:tmp));
+%scoreSimilarity = scoreSimilarity - score_tmp(tmp+1);
+scoreSimilarity = score_tmp(1) - score_tmp(tmp+1);
 
 end
 

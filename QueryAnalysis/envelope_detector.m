@@ -14,7 +14,7 @@ bruitFond = noise(x, tmps);
 coeff = 5; % arbitraire
 E = RMS;
 E(E < bruitFond*coeff) = 0;
-figure, stem(E);
+%figure, stem(E);
 packets = delimit_packets( E );
 
 %% Sépare 2 notes proches
