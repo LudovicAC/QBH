@@ -79,6 +79,7 @@ for id=1:N_BddMidi
 end
 % acces à une séquence de pitch par : cell2mat(pitch_BddMidi(id))
 
+
 %% Compare query to bdd
 
 top = 20; % arbitraire  < N_BddMidi
@@ -106,6 +107,28 @@ hold on
 plot(w(:,2), w(:,1), '+r')
 hold off
 scoreSimilarity
+
+%%
+close all
+i=6;
+deb = 1;
+fin = 10;
+music = cell2mat(pitch_BddMidi(i));
+query = [music(deb:5); 70; music(5+1:fin)];
+%query = query + randn(fin-deb+1,1)*2;
+figure,
+hold on
+plot(music, 'or')
+plot(query, '+b')
+hold off
+[scoreSimilarity, S, w] = LADTW_Similarity(music, query);
+figure, imagesc(S), colorbar
+hold on
+plot(w(:,2), w(:,1), '+r')
+hold off
+scoreSimilarity
+
+
 
 %%
 music = cell2mat(pitch_BddMidi(6));

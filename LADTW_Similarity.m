@@ -19,7 +19,7 @@ S(1,2:end) = max([ -abs(repmat(q(1), m-1, 1) - p(2:end)) + Cdtw, zeros(m-1,1) ],
 
 for i=2:n
     for j=2:m
-        s = -sqrt(abs(q(i) - p(j)));
+        s = -(abs(q(i) - p(j)));
         S(i,j) = max([S(i-1,j-1)+s+Cdtw, S(i-1, j)+s+w*Cdtw, S(i, j-1)+s+w*Cdtw, 0]);
     end
 end
